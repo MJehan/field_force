@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "514873500898",
+    "project_id": "field-force-a0431",
+    "storage_bucket": "field-force-a0431.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514873500898:android:69d11691f04c3e6f6caabb",
+        "android_client_info": {
+          "package_name": "com.example.field_force"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "514873500898-amo3uh78c1alnvsi4rm5rnj8p99ajkqo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7m8TFSvhdmZAv8KnvATCL18bwkFC2P8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "514873500898-amo3uh78c1alnvsi4rm5rnj8p99ajkqo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
