@@ -14,7 +14,8 @@ import 'package:location/location.dart';
 class MapScreen extends StatefulWidget {
   final String user_id;
   final String user_name;
-  const MapScreen(this.user_id, this.user_name);
+  final String _currentAddress;
+  const MapScreen(this.user_id, this.user_name, this._currentAddress);
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -26,7 +27,7 @@ class _MapScreenState extends State<MapScreen>  {
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   crearmarcadores(){
-    _database.collection('location').where('identifier', isEqualTo: widget.user_id)
+    _database.collection('location_test').where('identifier', isEqualTo: widget.user_id)
         .get().then((value) {
       if(value.docs.isNotEmpty){
         for(int i= 0; i < value.docs.length; i++) {
@@ -44,7 +45,7 @@ class _MapScreenState extends State<MapScreen>  {
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(index['latitude'], index['longitude']),
-      infoWindow: InfoWindow(title: widget.user_name),
+      infoWindow: InfoWindow(title: widget.user_name, snippet: widget._currentAddress),
     );
 
     setState(() {
