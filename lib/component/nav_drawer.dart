@@ -1,13 +1,12 @@
+import 'package:field_force/admin/Search/search_screen_home.dart';
+import 'package:field_force/admin/screens/home_screen.dart';
+import 'package:field_force/admin/screens/search_employee.dart';
+import 'package:field_force/admin/screens/show_all_google_maop.dart';
+import 'package:field_force/login/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ticket_app/login/login_screen.dart';
-
-final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-_signOut() async {
-  await _firebaseAuth.signOut();
-}
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -16,16 +15,18 @@ class NavDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Color(0xFF6200EE),
+           const DrawerHeader(
+            decoration: BoxDecoration (
+              color: Colors.deepPurple,
+              //color: Colors.white60,
               image: DecorationImage(
                 fit: BoxFit.fill,
-                image: AssetImage(''),
+                image: AssetImage(""), //images/scom_logo.png
               ),
             ),
             child: Text(
-              'Ticket',
+              'SCL Field Force',
+              textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 25,
@@ -33,15 +34,21 @@ class NavDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.add),
-            title: const Text('New Ticket'),
-            onTap: () => {},
+            leading: const Icon(Icons.location_pin, color: Colors.red,),
+            title: const Text('Location'),
+            onTap: () => {
+            Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const ShowAllGoogleMap()))
+            },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.info),
-          //   title: Text('Find Info'),
-          //   onTap: () => {Navigator.of(context).pop()},
-          // ),
+          ListTile(
+            leading: const Icon(Icons.search, color: Colors.deepPurple,),
+            title: const Text('Find Employee'),
+            onTap: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const SearchScreenHome()))
+            },
+          ),
           // ListTile(
           //   leading: Icon(Icons.report),
           //   title: Text('Report'),
@@ -52,23 +59,34 @@ class NavDrawer extends StatelessWidget {
           //   title: Text('Contact'),
           //   onTap: () => {Navigator.of(context).pop()},
           // ),
-          // ListTile(
-          //   leading: Icon(Icons.feedback),
-          //   title: Text('FeedBack'),
-          //   onTap: () => {Navigator.of(context).pop()},
-          // ),
+          ListTile(
+            leading: const Icon(Icons.vpn_key_outlined),
+            title: const Text('Admin Credentials'),
+            onTap: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const AdminHomeScreen())
+              ),
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
-            onTap: () async {
-              await _signOut();
-              if (_firebaseAuth.currentUser == null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                );
-              }
-            },
+              onTap: () async{
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.remove('email');
+                FirebaseAuth.instance.signOut().then((_){
+                  Navigator.pushNamed(context, LoginScreen.id);
+                });
+              },
+            // onTap: () async {
+            //   await _signOut();
+            //   if (_firebaseAuth.currentUser == null) {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => const LoginScreen()),
+            //     );
+            //   }
+            // },
           ),
         ],
       ),

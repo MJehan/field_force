@@ -4,63 +4,7 @@ import 'package:field_force/screens/my_feed.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// class MyNavigationBar extends StatefulWidget {
-//   static const String id = 'bottom_screen';
-//
-//   @override
-//   _MyNavigationBarState createState() => _MyNavigationBarState();
-// }
-//
-// class _MyNavigationBarState extends State<MyNavigationBar > {
-//   int _selectedIndex = 0;
-//   static const List<Widget> _widgetOptions = <Widget>[
-//     MyProfile(),
-//     LeaveScreen(),
-//     MoreScreen(),
-//   ];
-//
-//   void _onItemTapped(int index) {
-//     setState(() {
-//       _selectedIndex = index;
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: _widgetOptions.elementAt(_selectedIndex),
-//       ),
-//       bottomNavigationBar: BottomNavigationBar(
-//           items: const <BottomNavigationBarItem>[
-//             BottomNavigationBarItem(
-//                 icon: Icon(Icons.home),
-//                 label: 'Home' ,
-//             ),
-//             BottomNavigationBarItem(
-//                 icon: Icon(Icons.calendar_today_outlined),
-//                 label: 'Search',
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.more_horiz),
-//               label: 'Profile',
-//             ),
-//           ],
-//           type: BottomNavigationBarType.shifting,
-//           currentIndex: _selectedIndex,
-//           backgroundColor: Colors.white,
-//           selectedItemColor: Colors.green,
-//           selectedLabelStyle: const TextStyle(fontSize: 22, color: Colors.green),
-//           unselectedItemColor: Colors.black87.withOpacity(.60),
-//           unselectedLabelStyle: const TextStyle(fontSize: 18),
-//           iconSize: 40,
-//           onTap: _onItemTapped,
-//           elevation: 5
-//       ),
-//     );
-//   }
-// }
-//
+
 
 
 class BottomNavBar extends StatefulWidget {

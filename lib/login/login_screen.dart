@@ -47,21 +47,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(
-                height: 70.0,
+                height: 50.0,
               ),
               Padding(
                   padding:const EdgeInsets.only(left: 10.0, right: 10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      TextField(
-                        keyboardType: TextInputType.emailAddress,
-                        textAlign: TextAlign.center,
-                        onChanged: (value) {
-                          email = value;
-                        },
-                        decoration:
-                        kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+                      SingleChildScrollView(
+                        child: TextField(
+                          keyboardType: TextInputType.emailAddress,
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            email = value;
+                          },
+                          decoration:
+                          kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+                        ),
                       ),
                       const SizedBox(
                         height: 8.0,
@@ -98,9 +100,30 @@ class _LoginScreenState extends State<LoginScreen> {
                             setState(() {
                               showSpinner = false;
                             });
-                          } catch (e) {
+                          } on FirebaseAuthException catch (e) {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: const Text("Ops! Login Failed"),
+                                content: Text('${e.message}'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    },
+                                    child: const Text('Okay'),
+                                  )
+                                ],
+                              ),
+                            );
                             print(e);
                           }
+                          setState(() {
+                            showSpinner = false;
+                          });
+                          // catch (e) {
+                          //   print(e);
+                          // }
                         },
                       ),
                       const SizedBox(

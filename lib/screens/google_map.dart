@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:field_force/component/nav_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -14,8 +15,9 @@ import 'package:location/location.dart';
 class MapScreen extends StatefulWidget {
   final String user_id;
   final String user_name;
-  final String _currentAddress;
-  const MapScreen(this.user_id, this.user_name, this._currentAddress);
+  final String date;
+  final String title;
+  const MapScreen(this.user_id, this.user_name,this.date, this.title);
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -27,8 +29,8 @@ class _MapScreenState extends State<MapScreen>  {
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   crearmarcadores(){
-    _database.collection('location_test').where('identifier', isEqualTo: widget.user_id)
-        .get().then((value) {
+    _database.collection('location_test').where('identifier', isEqualTo: widget.user_id).
+    where('Date', isEqualTo: widget.date).get().then((value) {
       if(value.docs.isNotEmpty){
         for(int i= 0; i < value.docs.length; i++) {
           initMarker(value.docs[i].data(), value.docs[i].id);
@@ -45,7 +47,7 @@ class _MapScreenState extends State<MapScreen>  {
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(index['latitude'], index['longitude']),
-      infoWindow: InfoWindow(title: widget.user_name, snippet: widget._currentAddress),
+      infoWindow: InfoWindow(title: widget.user_name),
     );
 
     setState(() {
@@ -71,6 +73,13 @@ class _MapScreenState extends State<MapScreen>  {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      drawer: NavDrawer(),
+      appBar: AppBar(
+        backgroundColor: Colors.deepPurple,
+        title:  Center(
+          child: Text(widget.title),
+        ),
+      ),
       body: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: _kinitialPosition,

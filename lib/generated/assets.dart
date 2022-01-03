@@ -3,5 +3,8 @@ class Assets {
   Assets._();
 
   static const String imagesScom = 'images/scom.jpg';
+  static const String imagesScom1 = 'images/scom1.png';
+  static const String imagesScom2 = 'images/scom2.png';
+  static const String imagesScomLogo = 'images/scom_logo.png';
 
 }

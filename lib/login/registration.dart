@@ -110,13 +110,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     setState(() {
                       showSpinner = false;
                     });
+                  } on FirebaseAuthException catch (e) {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title:
+                        const Text(' Ops! Registration Failed'),
+                        content: Text('${e.message}'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                            },
+                            child: const Text('Okay'),
+                          )
+                        ],
+                      ),
+                    );
                   }
-                  catch(e)
-                  {
-                    print(e);
-                  }
-
-
+                  setState(() {
+                    showSpinner = false;
+                  });
                 },
               ),
             ],

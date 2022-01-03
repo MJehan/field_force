@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:field_force/constrains/bottom_navbar.dart';
+import 'package:field_force/admin/screens/home_screen.dart';
+import 'package:field_force/component/nav_drawer.dart';
 import 'package:field_force/login/login_screen.dart';
 import 'package:field_force/popUpScreen/pop_up_for_punch_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,9 +14,9 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart' as loc;
-
 import 'google_map.dart';
 import 'list_view_data_show.dart';
+
 
 
 final CollectionReference collectionReference = FirebaseFirestore.instance.collection('Location_And_Data');
@@ -91,8 +92,8 @@ class _MyProfileState extends State<MyProfile> {
       "longitude": long,
       "location": _currentAddress,
       "text" : buttonTitle,
-      "time" : inTime,
-      'outTime' : outTime,
+      "time" : mainTime,
+      //'outTime' : inTime,
       "date" : date,
       "noteText" : noteTextController.text,
     });
@@ -167,7 +168,9 @@ class _MyProfileState extends State<MyProfile> {
 
 
   Widget child = Container();
+  String mainTime = '';
   String inTime = '';
+  String time = '';
   String outTime = '';
 
   double lat = 0.0;
@@ -181,32 +184,19 @@ class _MyProfileState extends State<MyProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavDrawer(),
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
           'My Feed',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
-        leading: Align(
-          alignment: Alignment.centerRight,
-          child: IconButton(
-            onPressed: () async{
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.remove('email');
-              FirebaseAuth.instance.signOut().then((_){
-                Navigator.pushNamed(context, LoginScreen.id);
-              });
-            },
-            icon: const Icon(Icons.logout, color:Colors.black),
-          ),
-        ),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF6200EE),
       ),
       body: Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
@@ -259,7 +249,8 @@ class _MyProfileState extends State<MyProfile> {
 
                             buttonTitle = 'Check In';
                             DateTime now = DateTime.now();
-                            inTime = DateFormat.Hms().format(now);
+                            mainTime = DateFormat.Hms().format(now);
+                            inTime = mainTime;
                             date = DateFormat.yMd().format(now);
                             //create();
                           }) ;
@@ -268,7 +259,8 @@ class _MyProfileState extends State<MyProfile> {
                             await _listLocation();
                             await _getCurrentLocation();
                             DateTime now = DateTime.now();
-                            inTime = DateFormat.Hms().format(now);
+                            mainTime = DateFormat.Hms().format(now);
+                            inTime = mainTime;
                             date = DateFormat.yMd().format(now);
                           }
                           else
@@ -309,18 +301,7 @@ class _MyProfileState extends State<MyProfile> {
                     child: FlatButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => MapScreen(_identifier!, _userName)));
-                        // dataStream();
-                        // openDialog();
-                        // final textData = noteTextController.text;
-                        // if(textData == null || textData.isEmpty)
-                        // {
-                        //   return;
-                        // }
-                        // setState(() {
-                        //   this.textData = textData;
-                        // });
-                        // noteTextController.text = '';
+                            builder: (context) => MapScreen(_identifier!, _userName, date, 'Map View')));
                       },
                       color: Colors.black12,
                       child: Column(
@@ -354,7 +335,8 @@ class _MyProfileState extends State<MyProfile> {
                           setState(() {
                             buttonTitle = 'Check Out';
                             DateTime now = DateTime.now();
-                            outTime = DateFormat.Hms().format(now);
+                            mainTime = DateFormat.Hms().format(now);
+                            outTime = mainTime;
                             date = DateFormat.yMd().format(now);
                           });
                           if(_currentAddress == null)
@@ -362,7 +344,8 @@ class _MyProfileState extends State<MyProfile> {
                             _stopLocation();
                             _getCurrentLocation();
                             DateTime now = DateTime.now();
-                            outTime = DateFormat.Hms().format(now);
+                            mainTime = DateFormat.Hms().format(now);
+                            outTime = mainTime;
                             date = DateFormat.yMd().format(now);
                           }
                           else
@@ -513,9 +496,113 @@ class _MyProfileState extends State<MyProfile> {
               ),
             ),
           ),
+
+          const SizedBox(height: 3.0),
+
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+            decoration: const BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.all(
+                Radius.circular(20.0),
+              ),
+            ),
+            child: Expanded(
+              child: Row(
+                children:  <Widget>[
+                  Expanded(
+                    child: Row(
+                      children:  <Widget>[
+                        Expanded(
+                          child: FlatButton(
+                            onPressed: ()  {
+                              // Navigator.of(context).push(MaterialPageRoute(
+                              //     builder: (context) => const AdminHomeScreen()));
+                            },
+                            color: Colors.black12,
+                            child: Column(
+                              children: const <Widget>[
+                                Icon(Icons.location_pin, size: 22.00, color: Colors.black),
+                                Text('Location',
+                                  style: TextStyle(
+                                    fontSize: 13.00,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                  const VerticalDivider(
+                    color: Colors.black,
+                    width: 30,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: FlatButton(
+                            onPressed: () {},
+                            color: Colors.black12,
+                            child: Column(
+                              children: const <Widget>[
+                                Icon(Icons.location_pin, size: 22.00, color: Colors.black),
+                                Text('Location',
+                                  style: TextStyle(
+                                    fontSize: 13.00,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const VerticalDivider(
+                    color: Colors.black,
+                    width: 30,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: FlatButton(
+                            onPressed: () async {},
+                            color: Colors.black12,
+                            child: Column(
+                              children: const <Widget>[
+                                Icon(Icons.more_horiz, size: 22.00, color: Colors.black),
+                                Text('More',
+                                  style: TextStyle(
+                                    fontSize: 13.00,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
-      bottomNavigationBar: const BottomNavBar(),
     );
   }
   _getCurrentLocation() async{
@@ -539,8 +626,8 @@ class _MyProfileState extends State<MyProfile> {
       long = _currentPosition!.longitude;
       Placemark place = p[0];
       setState(() {
-        _currentAddress = '${place.name},${place.locality},${place.postalCode},${place.country}';
-        //_currentAddress = "${place.street},${place.subThoroughfare},${place.thoroughfare}, ${place.subLocality}, ${place.locality},${place.country},";
+        _currentAddress = '${place.thoroughfare},${place.locality},${place.postalCode},${place.country}';
+        //_currentAddress = "${place.street},${place.subThoroughfare},`${place.thoroughfare}, ${place.subLocality}, ${place.locality},${place.country},";
       });
     } catch (e) {
       print(e);
@@ -548,7 +635,8 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   Future<void> _listLocation() async {
-    location.changeSettings(interval: 60000, distanceFilter: 5.0); // Define Time for fetch location
+    location.changeSettings(interval: 1000, distanceFilter: 5.0);
+    // location.changeSettings(interval: 40000, distanceFilter: 5.0); // Define Time for fetch location
     _locationSubscription = location.onLocationChanged.handleError((onError) {
       print('error_in_call_live');
       print(onError);
@@ -557,11 +645,18 @@ class _MyProfileState extends State<MyProfile> {
         _locationSubscription = null;
       });
     }).listen((loc.LocationData currentlocation) async {
+      _getCurrentLocation();
+      DateTime now = DateTime.now();
+      time = DateFormat.Hms().format(now);
       //print('print_properly');
-      await FirebaseFirestore.instance.collection('location').doc().set({
+      await FirebaseFirestore.instance.collection('location_test').doc().set({
         'latitude': currentlocation.latitude,
         'longitude': currentlocation.longitude,
         "identifier": _identifier,
+        "CurrentAddress" : _currentAddress,
+        "Date" : date,
+        "Time" : time,
+        "name" : _userName,
       },
         // SetOptions(merge: true),
       );
@@ -574,7 +669,6 @@ class _MyProfileState extends State<MyProfile> {
       _locationSubscription = null;
     });
   }
-
 }
 
 class StreamBuilderScreen extends StatelessWidget {
@@ -599,7 +693,6 @@ class StreamBuilderScreen extends StatelessWidget {
             final resultWidget = ListViewScreen(location, text, time);
             resultWidgets.add(resultWidget);
           }
-
           return Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 10.00, horizontal: 20.0),

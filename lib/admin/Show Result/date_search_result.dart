@@ -1,6 +1,11 @@
+import 'package:field_force/admin/models/showdata.dart';
+import 'package:field_force/admin/models/user.dart';
+import 'package:field_force/admin/popUpScreen/date_picker.dart';
+import 'package:field_force/component/nav_drawer.dart';
+import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location/location.dart';
@@ -8,50 +13,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 
-
-final CollectionReference collectionReference = FirebaseFirestore.instance.collection('location_test');
-final firebase = FirebaseFirestore.instance;
-final _auth = FirebaseAuth.instance;
-
-String _userName = '';
-String date = '';
-
-getUserName() async {
-  final CollectionReference userName = FirebaseFirestore.instance.collection('users');
-  final String uid = _auth.currentUser!.uid;
-  await userName.doc(uid).get().then((DocumentSnapshot ) =>
-  _userName = DocumentSnapshot['name']);
-  print('user:$_userName');
-}
-
-
-class ShowAllGoogleMap extends StatefulWidget {
-  const ShowAllGoogleMap();
+class DateSearchResultScreen extends StatefulWidget {
+  final String _formDate;
+  final String _toDate;
+   const DateSearchResultScreen(this._formDate,this._toDate);
 
   @override
-  _ShowAllGoogleMapState createState() => _ShowAllGoogleMapState();
+  _DateSearchResultScreenState createState() => _DateSearchResultScreenState();
 }
 
-class _ShowAllGoogleMapState extends State<ShowAllGoogleMap> {
-  @override
-  void initState() {
-    crearmarcadores();
-    super.initState();
-    getUserName();
-  }
+class _DateSearchResultScreenState extends State<DateSearchResultScreen> {
 
   final FirebaseFirestore _database = FirebaseFirestore.instance;
   Completer<GoogleMapController> _controller = Completer();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   crearmarcadores(){
-    setState(() {
-      // _identifier = loggedInUser.uid;
-      DateTime now = DateTime.now();
-      date = DateFormat.yMd().format(now);
-    });
-    _database.collection('location_test').where('Date', isEqualTo: date)
-    .get().then((value) {
+    print('FresultScreen: ${widget._formDate}');
+    print('TresultScreen: ${widget._toDate}');
+    _database.collection('location_test').get().then((value) {
       if(value.docs.isNotEmpty){
         for(int i= 0; i < value.docs.length; i++) {
           initMarker(value.docs[i].data(), value.docs[i].id);
@@ -59,7 +39,6 @@ class _ShowAllGoogleMapState extends State<ShowAllGoogleMap> {
       }
     });
   }
-
   void initMarker(index, lugaresid) {
     var markerIdVal = lugaresid;
     final MarkerId markerId = MarkerId(markerIdVal);
@@ -68,7 +47,7 @@ class _ShowAllGoogleMapState extends State<ShowAllGoogleMap> {
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(index['latitude'], index['longitude']),
-      infoWindow: InfoWindow(title: index['name']),
+      //infoWindow: InfoWindow(title: widget.user_name),
     );
 
     setState(() {
@@ -85,28 +64,47 @@ class _ShowAllGoogleMapState extends State<ShowAllGoogleMap> {
     zoom: 14.4746,
   );
 
+  @override
+  void initState() {
+    crearmarcadores();
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
-      child: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.only(bottom: 20.0,top: 30.0, left: 15.0,right: 15.0),
-          child: GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: _kinitialPosition,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-            myLocationEnabled: true,
-            markers: Set<Marker>.of(markers.values),
+    return Scaffold(
+      drawer: NavDrawer(),
+      appBar: AppBar(
+        backgroundColor: Colors.deepPurple,
+        title: const Center(
+          child: Text('Search Employee'),
+        ),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Container(
+            child: Expanded(
+              child: Row(
+                children:  <Widget>[
+                  Expanded(
+                    child: GoogleMap(
+                      mapType: MapType.normal,
+                      initialCameraPosition: _kinitialPosition,
+                      onMapCreated: (GoogleMapController controller) {
+                        _controller.complete(controller);
+                      },
+                      myLocationEnabled: true,
+                      markers: Set<Marker>.of(markers.values),
+                    ),
+
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: _currentLocation,
-          label: const Text('Tap to View People'),
-          icon: const Icon(Icons.location_on),
-        ),
+        ],
       ),
     );
   }
@@ -130,4 +128,5 @@ class _ShowAllGoogleMapState extends State<ShowAllGoogleMap> {
     ),
     );
   }
+
 }

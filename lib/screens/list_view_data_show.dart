@@ -23,11 +23,11 @@ class ListViewScreen extends StatelessWidget {
           ),
           Material(
             borderRadius: BorderRadius.circular(30.00),
-            elevation: 5.00,
+            elevation: 10.00,
             color: Colors.deepPurpleAccent,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: Text( 'Location: $location\nTime: $time',
+              child: Text('Location: $location\nTime: $time',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 15.0,
