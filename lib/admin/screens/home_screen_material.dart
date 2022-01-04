@@ -60,8 +60,6 @@ class _HomeScreenMaterialState extends State<HomeScreenMaterial> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -78,6 +76,7 @@ class _HomeScreenMaterialState extends State<HomeScreenMaterial> {
                     child: Text(
                       '$_userLenght \n Total Employee',
                       style: const TextStyle(
+                        fontWeight: FontWeight.bold,
                         color: Colors.black,
                         fontSize: 15.00,
                       ),

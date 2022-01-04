@@ -113,9 +113,18 @@ class _DateSearchState extends State<DateSearch> {
       child: Scaffold(
         drawer: NavDrawer(),
         appBar: AppBar(
-          backgroundColor: Colors.deepPurple,
-          title: const Center(
-            child: Text('Search Employee'),
+          title: const Text('Search Employee'),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: <Color>[
+                  Colors.blue,
+                  Colors.deepPurple
+                ],
+              ),
+            ),
           ),
         ),
         body: Column(
@@ -132,7 +141,7 @@ class _DateSearchState extends State<DateSearch> {
                           child: FormBuilderDateTimePicker(
                             name: "From Date",
                             inputType: InputType.date,
-                            format: DateFormat("dd-MM-yyyy"),
+                            format: DateFormat("MM/dd/yyyy"),
                             decoration: const InputDecoration(
                               labelText: "From Date",
                               labelStyle: TextStyle(
@@ -153,7 +162,7 @@ class _DateSearchState extends State<DateSearch> {
                         child: FormBuilderDateTimePicker(
                           name: "To Date",
                           inputType: InputType.date,
-                          format: DateFormat("dd-MM-yyyy"),
+                          format: DateFormat("MM/dd/yyyy"),
                           decoration: const InputDecoration(
                             labelText: "To Date",
                             labelStyle: TextStyle(

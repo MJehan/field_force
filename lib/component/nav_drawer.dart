@@ -17,8 +17,7 @@ class NavDrawer extends StatelessWidget {
         children: <Widget>[
            const DrawerHeader(
             decoration: BoxDecoration (
-              color: Colors.deepPurple,
-              //color: Colors.white60,
+              gradient: LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
               image: DecorationImage(
                 fit: BoxFit.fill,
                 image: AssetImage(""), //images/scom_logo.png

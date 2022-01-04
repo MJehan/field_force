@@ -99,9 +99,18 @@ class _DatePickerPopUpScreenState extends State<DatePickerPopUpScreen> {
       child: Scaffold(
         drawer: NavDrawer(),
         appBar: AppBar(
-          backgroundColor: Colors.deepPurple,
-          title: const Center(
-            child: Text('Search Employee'),
+          title: const Center(child: Text('Search Employee')),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: <Color>[
+                  Colors.blue,
+                  Colors.deepPurple
+                ],
+              ),
+            ),
           ),
         ),
         body: Column(
@@ -131,9 +140,13 @@ class _DatePickerPopUpScreenState extends State<DatePickerPopUpScreen> {
                             borderSide: BorderSide(color: Color(0xFF6200EE)),
                           ),
                         ),
-                        initialValue: DateTime.now(),
+                        //initialValue: DateTime.now(),
                         onSaved: (val) =>
-                            setState(() => _user.formDate = val!.toString()),
+                            setState(() {
+                            _user.formDate = val!.toString();
+                            //DateTime now = _user.formDate as DateTime;
+                            _user.formDate = DateFormat.yMd().format(val);
+                            }),
                       ),
                       const SizedBox(height: 10.0),
                       FormBuilderDateTimePicker(
@@ -151,10 +164,13 @@ class _DatePickerPopUpScreenState extends State<DatePickerPopUpScreen> {
                             borderSide: BorderSide(color: Color(0xFF6200EE)),
                           ),
                         ),
-                        initialValue: DateTime.now(),
+                        //initialValue: DateTime.now(),
                         onSaved: (val) =>
-                            setState(() => _user.toDate = val!.toString(),
-                            ),
+                            setState(() {
+                              _user.toDate = val!.toString();
+                              //DateTime now = _user.toDate as DateTime;
+                              _user.toDate = DateFormat.yMd().format(val);
+                            }),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -165,8 +181,9 @@ class _DatePickerPopUpScreenState extends State<DatePickerPopUpScreen> {
                             if (form!.validate()) {
                               form.save();
                               _user.save();
-                              _user.formDate = _user.formDate.substring(0, 10);
-                              _user.toDate = _user.toDate.substring(0, 10);
+                              //_user.formDate = _user.formDate.substring(0, 10);
+                              _user.formDate = _user.formDate;
+                              _user.toDate = _user.toDate;
                             }
                             print('From_date: ${_user.formDate}');
                             print('To_date: ${_user.toDate}');

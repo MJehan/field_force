@@ -96,9 +96,18 @@ class _SearchScreenHomeState extends State<SearchScreenHome> {
         child: Scaffold(
           drawer: NavDrawer(),
           appBar: AppBar(
-            backgroundColor: Colors.deepPurple,
-            title: const Center(
-                child: Text('Search Employee'),
+            title: const Text('Search Employee'),
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: <Color>[
+                    Colors.blue,
+                    Colors.deepPurple
+                  ],
+                ),
+              ),
             ),
           ),
           body: Column(

@@ -17,7 +17,18 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       drawer: NavDrawer(),
       appBar: AppBar(
         title: const Center(child: Text('SCL Field Force')),
-        backgroundColor: const Color(0xFF6200EE),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: <Color>[
+                Colors.blue,
+                Colors.deepPurple
+              ],
+            ),
+          ),
+        ),
       ),
       body: const HomeScreenMaterial(),
     );

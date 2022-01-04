@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'package:field_force/admin/screens/home_screen.dart';
 import 'package:field_force/component/nav_drawer.dart';
-import 'package:field_force/login/login_screen.dart';
 import 'package:field_force/popUpScreen/pop_up_for_punch_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -98,6 +96,17 @@ class _MyProfileState extends State<MyProfile> {
       "noteText" : noteTextController.text,
     });
   }
+  _checkActiveUser(){
+    firebase.collection('user_active').add({
+      "identifier": _identifier,
+      "time" : mainTime,
+      "date" : date,
+      "status" : status,
+      "name" : _userName,
+
+    });
+  }
+
   void dataStream() async
   {
     await for (var snapshot in firebase.collection('Location_And_Data').snapshots()) {
@@ -168,6 +177,7 @@ class _MyProfileState extends State<MyProfile> {
 
 
   Widget child = Container();
+  String status = '';
   String mainTime = '';
   String inTime = '';
   String time = '';
@@ -184,18 +194,25 @@ class _MyProfileState extends State<MyProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
       backgroundColor: Colors.white,
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'My Feed',
-          style: TextStyle(
-            color: Colors.white,
+        title: const Text('SCL Field Force'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: <Color>[
+                Colors.blue,
+                Colors.deepPurple
+              ],
+            ),
           ),
         ),
-        backgroundColor: const Color(0xFF6200EE),
       ),
+      drawer: NavDrawer(),
+
+
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -246,7 +263,7 @@ class _MyProfileState extends State<MyProfile> {
                           await _getCurrentLocation();
                           await _listLocation();
                           setState(() {
-
+                            status = 'active';
                             buttonTitle = 'Check In';
                             DateTime now = DateTime.now();
                             mainTime = DateFormat.Hms().format(now);
@@ -256,8 +273,8 @@ class _MyProfileState extends State<MyProfile> {
                           }) ;
                           if(_currentAddress == null)
                           {
-                            await _listLocation();
                             await _getCurrentLocation();
+                            await _listLocation();
                             DateTime now = DateTime.now();
                             mainTime = DateFormat.Hms().format(now);
                             inTime = mainTime;
@@ -266,6 +283,7 @@ class _MyProfileState extends State<MyProfile> {
                           else
                           {
                             create();
+                            _checkActiveUser();
                           }
                           flag = false;
                         }
@@ -333,6 +351,7 @@ class _MyProfileState extends State<MyProfile> {
                           _stopLocation();
                           _getCurrentLocation();
                           setState(() {
+                            status = 'deactive';
                             buttonTitle = 'Check Out';
                             DateTime now = DateTime.now();
                             mainTime = DateFormat.Hms().format(now);
@@ -350,6 +369,7 @@ class _MyProfileState extends State<MyProfile> {
                           }
                           else
                           {
+                            _checkActiveUser();
                             create();
                           }
                           flag = true;
@@ -497,110 +517,110 @@ class _MyProfileState extends State<MyProfile> {
             ),
           ),
 
-          const SizedBox(height: 3.0),
-
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
-            decoration: const BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.all(
-                Radius.circular(20.0),
-              ),
-            ),
-            child: Expanded(
-              child: Row(
-                children:  <Widget>[
-                  Expanded(
-                    child: Row(
-                      children:  <Widget>[
-                        Expanded(
-                          child: FlatButton(
-                            onPressed: ()  {
-                              // Navigator.of(context).push(MaterialPageRoute(
-                              //     builder: (context) => const AdminHomeScreen()));
-                            },
-                            color: Colors.black12,
-                            child: Column(
-                              children: const <Widget>[
-                                Icon(Icons.location_pin, size: 22.00, color: Colors.black),
-                                Text('Location',
-                                  style: TextStyle(
-                                    fontSize: 13.00,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  const VerticalDivider(
-                    color: Colors.black,
-                    width: 30,
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: FlatButton(
-                            onPressed: () {},
-                            color: Colors.black12,
-                            child: Column(
-                              children: const <Widget>[
-                                Icon(Icons.location_pin, size: 22.00, color: Colors.black),
-                                Text('Location',
-                                  style: TextStyle(
-                                    fontSize: 13.00,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const VerticalDivider(
-                    color: Colors.black,
-                    width: 30,
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: FlatButton(
-                            onPressed: () async {},
-                            color: Colors.black12,
-                            child: Column(
-                              children: const <Widget>[
-                                Icon(Icons.more_horiz, size: 22.00, color: Colors.black),
-                                Text('More',
-                                  style: TextStyle(
-                                    fontSize: 13.00,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // const SizedBox(height: 3.0),
+          //
+          // Container(
+          //   padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+          //   decoration: const BoxDecoration(
+          //     color: Colors.black12,
+          //     borderRadius: BorderRadius.all(
+          //       Radius.circular(20.0),
+          //     ),
+          //   ),
+          //   child: Expanded(
+          //     child: Row(
+          //       children:  <Widget>[
+          //         Expanded(
+          //           child: Row(
+          //             children:  <Widget>[
+          //               Expanded(
+          //                 child: FlatButton(
+          //                   onPressed: ()  {
+          //                     // Navigator.of(context).push(MaterialPageRoute(
+          //                     //     builder: (context) => const AdminHomeScreen()));
+          //                   },
+          //                   color: Colors.black12,
+          //                   child: Column(
+          //                     children: const <Widget>[
+          //                       Icon(Icons.location_pin, size: 22.00, color: Colors.black),
+          //                       Text('Location',
+          //                         style: TextStyle(
+          //                           fontSize: 13.00,
+          //                           color: Colors.black,
+          //                         ),
+          //                       ),
+          //                     ],
+          //                   ),
+          //                 ),
+          //               ),
+          //
+          //             ],
+          //           ),
+          //         ),
+          //         const VerticalDivider(
+          //           color: Colors.black,
+          //           width: 30,
+          //         ),
+          //         const SizedBox(
+          //           width: 8,
+          //         ),
+          //         Expanded(
+          //           child: Row(
+          //             children: <Widget>[
+          //               Expanded(
+          //                 child: FlatButton(
+          //                   onPressed: () {},
+          //                   color: Colors.black12,
+          //                   child: Column(
+          //                     children: const <Widget>[
+          //                       Icon(Icons.location_pin, size: 22.00, color: Colors.black),
+          //                       Text('Location',
+          //                         style: TextStyle(
+          //                           fontSize: 13.00,
+          //                           color: Colors.black,
+          //                         ),
+          //                       ),
+          //                     ],
+          //                   ),
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //         const VerticalDivider(
+          //           color: Colors.black,
+          //           width: 30,
+          //         ),
+          //         const SizedBox(
+          //           width: 8,
+          //         ),
+          //         Expanded(
+          //           child: Row(
+          //             children: <Widget>[
+          //               Expanded(
+          //                 child: FlatButton(
+          //                   onPressed: () async {},
+          //                   color: Colors.black12,
+          //                   child: Column(
+          //                     children: const <Widget>[
+          //                       Icon(Icons.more_horiz, size: 22.00, color: Colors.black),
+          //                       Text('More',
+          //                         style: TextStyle(
+          //                           fontSize: 13.00,
+          //                           color: Colors.black,
+          //                         ),
+          //                       ),
+          //                     ],
+          //                   ),
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -635,8 +655,8 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   Future<void> _listLocation() async {
-    location.changeSettings(interval: 1000, distanceFilter: 5.0);
-    // location.changeSettings(interval: 40000, distanceFilter: 5.0); // Define Time for fetch location
+    //location.changeSettings(interval: 900, accuracy: loc.LocationAccuracy.high);
+    //location.changeSettings(interval: 100, distanceFilter: 5.0);
     _locationSubscription = location.onLocationChanged.handleError((onError) {
       print('error_in_call_live');
       print(onError);
@@ -648,8 +668,8 @@ class _MyProfileState extends State<MyProfile> {
       _getCurrentLocation();
       DateTime now = DateTime.now();
       time = DateFormat.Hms().format(now);
-      //print('print_properly');
-      await FirebaseFirestore.instance.collection('location_test').doc().set({
+      print('print_properly');
+      await FirebaseFirestore.instance.collection('location_test').add({
         'latitude': currentlocation.latitude,
         'longitude': currentlocation.longitude,
         "identifier": _identifier,
@@ -662,6 +682,34 @@ class _MyProfileState extends State<MyProfile> {
       );
     });
   }
+
+  // Future<void> _listLocation() async {
+  //   //location.changeSettings(interval: 100, distanceFilter: 5.0);
+  //   // location.changeSettings(interval: 40000, distanceFilter: 5.0); // Define Time for fetch location
+  //   _locationSubscription = location.onLocationChanged.handleError((onError) {
+  //     print('error_in_call_live');
+  //     print(onError);
+  //     _locationSubscription?.cancel();
+  //     setState(() {
+  //       _locationSubscription = null;
+  //     });
+  //   }).listen((loc.LocationData currentlocation) async {
+  //     _getCurrentLocation();
+  //     DateTime now = DateTime.now();
+  //     time = DateFormat.Hms().format(now);
+  //     await FirebaseFirestore.instance.collection('location_test').doc().set({
+  //       'latitude': currentlocation.latitude,
+  //       'longitude': currentlocation.longitude,
+  //       "identifier": _identifier,
+  //       "CurrentAddress" : _currentAddress,
+  //       "Date" : date,
+  //       "Time" : time,
+  //       "name" : _userName,
+  //     },
+  //       // SetOptions(merge: true),
+  //     );
+  //   });
+  // }
 
   _stopLocation() {
     _locationSubscription?.cancel();
