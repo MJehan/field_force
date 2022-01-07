@@ -10,12 +10,9 @@ import 'package:location/location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-import 'date_search.dart';
-
-
-final CollectionReference collectionReference = FirebaseFirestore.instance.collection('location_test');
 final firebase = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
+final CollectionReference collectionReference = FirebaseFirestore.instance.collection('location_test');
 
 String _userName = '';
 String date = '';
@@ -90,89 +87,89 @@ class _SearchScreenHomeState extends State<SearchScreenHome> {
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-          drawer: NavDrawer(),
-          appBar: AppBar(
-            title: const Text('Search Employee'),
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: <Color>[
-                    Colors.blue,
-                    Colors.deepPurple
-                  ],
-                ),
+    return Scaffold(
+      drawer: NavDrawer(),
+      appBar: AppBar(
+        title: const Text('Search Employee'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: <Color>[
+                Colors.blue,
+                Colors.deepPurple
+              ],
+            ),
+          ),
+        ),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0, bottom: 35.0),
+            child: Expanded(
+              child: Row(
+                children:  <Widget>[
+                   Expanded(
+                    child: FloatingActionButton.extended(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => DatePickerPopUpScreen()));
+                      },
+                      icon: const Icon(Icons.search),
+                      label: const Text("Date"),
+                      backgroundColor: Colors.lightBlueAccent,
+                    ),
+                   ),
+                   const SizedBox(
+                    width: 8.00,
+                  ),
+                  Expanded(
+                    child: FloatingActionButton.extended(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>   const TimePicker()));
+                      },
+                      icon: const Icon(Icons.search_rounded),
+                      label: const Text("Time"),
+                      backgroundColor: Colors.teal,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0, bottom: 35.0),
-                child: Expanded(
-                  child: Row(
-                    children:  <Widget>[
-                       Expanded(
-                        child: FloatingActionButton.extended(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>   DatePickerPopUpScreen()));
-                          },
-                          icon: const Icon(Icons.search),
-                          label: const Text("Date"),
-                          backgroundColor: Colors.lightBlueAccent,
-                        ),
-                       ),
-                       const SizedBox(
-                        width: 8.00,
-                      ),
-                      Expanded(
-                        child: FloatingActionButton.extended(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>   const TimePicker()));
-                          },
-                          icon: const Icon(Icons.search_rounded),
-                          label: const Text("Time"),
-                          backgroundColor: Colors.teal,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 15.0,
-              ),
-              Container(
-                child: Expanded(
-                  child: Row(
-                    children:  <Widget>[
-                      Expanded(
-                        child: GoogleMap(
-                          mapType: MapType.normal,
-                          initialCameraPosition: _kinitialPosition,
-                          onMapCreated: (GoogleMapController controller) {
-                            _controller.complete(controller);
-                          },
-                          myLocationEnabled: true,
-                          markers: Set<Marker>.of(markers.values),
-                        ),
-
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+          const SizedBox(
+            height: 15.0,
           ),
-        ),
+          Container(
+            child: Expanded(
+              child: Row(
+                children:  <Widget>[
+                  Expanded(
+                    child: GoogleMap(
+                      mapType: MapType.normal,
+                      initialCameraPosition: _kinitialPosition,
+                      onMapCreated: (GoogleMapController controller) {
+                        _controller.complete(controller);
+                      },
+                      myLocationEnabled: true,
+                      markers: Set<Marker>.of(markers.values),
+                    ),
+
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -195,5 +192,4 @@ class _SearchScreenHomeState extends State<SearchScreenHome> {
     ),
     );
   }
-
 }

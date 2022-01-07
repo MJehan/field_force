@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 
+
 class DateSearchResultScreen extends StatefulWidget {
   final String _formDate;
   final String _toDate;
@@ -29,9 +30,11 @@ class _DateSearchResultScreenState extends State<DateSearchResultScreen> {
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   crearmarcadores(){
-    print('FresultScreen: ${widget._formDate}');
-    print('TresultScreen: ${widget._toDate}');
-    _database.collection('location_test').get().then((value) {
+    //print('FresultScreen: ${widget._formDate}');
+    //print('TresultScreen: ${widget._toDate}');
+    _database.collection('location_test').where("Date", isGreaterThanOrEqualTo:  widget._formDate).
+    where("Date", isLessThanOrEqualTo: widget._toDate)
+        .get().then((value) {
       if(value.docs.isNotEmpty){
         for(int i= 0; i < value.docs.length; i++) {
           initMarker(value.docs[i].data(), value.docs[i].id);
@@ -47,7 +50,7 @@ class _DateSearchResultScreenState extends State<DateSearchResultScreen> {
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(index['latitude'], index['longitude']),
-      //infoWindow: InfoWindow(title: widget.user_name),
+      infoWindow: InfoWindow(title: index['name'],snippet: index['CurrentAddress']),
     );
 
     setState(() {
@@ -76,15 +79,25 @@ class _DateSearchResultScreenState extends State<DateSearchResultScreen> {
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        title: const Center(
-          child: Text('Search Employee'),
+        title: const Text('Search Employee'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: <Color>[
+                Colors.blue,
+                Colors.deepPurple
+              ],
+            ),
+          ),
         ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
+            //padding: const EdgeInsets.only( left: 5.0,right: 5.0),
             child: Expanded(
               child: Row(
                 children:  <Widget>[
@@ -128,5 +141,6 @@ class _DateSearchResultScreenState extends State<DateSearchResultScreen> {
     ),
     );
   }
-
 }
+
+

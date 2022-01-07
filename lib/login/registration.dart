@@ -58,7 +58,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     hintText: 'Enter your Name'),
               ),
               const SizedBox(
-                height: 24.0,
+                height: 8.0,
               ),
               TextField(
                 keyboardType: TextInputType.emailAddress,
@@ -84,9 +84,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               const SizedBox(
                 height: 24.0,
               ),
-              RoundedButton(
-                title: 'Register',
-                colour: Colors.lightBlueAccent,
+
+              RaisedButton(
                 onPressed: () async {
                   setState(() {
                     showSpinner = true;
@@ -94,19 +93,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   try{
                     final newUser  = await _auth.createUserWithEmailAndPassword(email: email, password: password);
                     if(newUser != null)
-                      {
-                        User? user = await _auth.currentUser;
-                        collectionReference.doc(user!.uid).set({
-                          "name" : name,
-                          "email" : email,
-                          "password" : password,
-                          "_identifier" : user.uid,
-                        }).then((value) async {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          prefs.setString('email',email);
-                          Navigator.pushNamed(context, LoginScreen.id);
-                        });
-                      }
+                    {
+                      User? user = await _auth.currentUser;
+                      collectionReference.doc(user!.uid).set({
+                        "name" : name,
+                        "email" : email,
+                        "password" : password,
+                        "_identifier" : user.uid,
+                      }).then((value) async {
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.setString('email',email);
+                        Navigator.pushNamed(context, LoginScreen.id);
+                      });
+                    }
                     setState(() {
                       showSpinner = false;
                     });
@@ -132,7 +131,82 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     showSpinner = false;
                   });
                 },
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+                padding: const EdgeInsets.all(0.0),
+                child: Ink(
+                  decoration: BoxDecoration(
+                      gradient: const LinearGradient(colors: [Color(0xff374ABE), Color(0xff64B6FF)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(30.0)
+                  ),
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 375.0, minHeight: 50.0),
+                    alignment: Alignment.center,
+                    child: const Text(
+                      "Registration",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white
+                      ),
+                    ),
+                  ),
+                ),
               ),
+
+
+              // RoundedButton(
+              //   title: 'Register',
+              //   colour: Colors.lightBlueAccent,
+              //   onPressed: () async {
+              //     setState(() {
+              //       showSpinner = true;
+              //     });
+              //     try{
+              //       final newUser  = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+              //       if(newUser != null)
+              //         {
+              //           User? user = await _auth.currentUser;
+              //           collectionReference.doc(user!.uid).set({
+              //             "name" : name,
+              //             "email" : email,
+              //             "password" : password,
+              //             "_identifier" : user.uid,
+              //           }).then((value) async {
+              //             SharedPreferences prefs = await SharedPreferences.getInstance();
+              //             prefs.setString('email',email);
+              //             Navigator.pushNamed(context, LoginScreen.id);
+              //           });
+              //         }
+              //       setState(() {
+              //         showSpinner = false;
+              //       });
+              //     } on FirebaseAuthException catch (e) {
+              //       showDialog(
+              //         context: context,
+              //         builder: (ctx) => AlertDialog(
+              //           title:
+              //           const Text(' Ops! Registration Failed'),
+              //           content: Text('${e.message}'),
+              //           actions: [
+              //             TextButton(
+              //               onPressed: () {
+              //                 Navigator.of(ctx).pop();
+              //               },
+              //               child: const Text('Okay'),
+              //             )
+              //           ],
+              //         ),
+              //       );
+              //     }
+              //     setState(() {
+              //       showSpinner = false;
+              //     });
+              //   },
+              // ),
+
+
             ],
           ),
         ),

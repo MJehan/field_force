@@ -11,18 +11,11 @@ import 'package:intl/intl.dart';
 
 final CollectionReference collectionReference = FirebaseFirestore.instance.collection('location_test');
 final firebase = FirebaseFirestore.instance;
-final _auth = FirebaseAuth.instance;
 
-String _userName = '';
 String date = '';
+String ? address;
+String ? time;
 
-getUserName() async {
-  final CollectionReference userName = FirebaseFirestore.instance.collection('users');
-  final String uid = _auth.currentUser!.uid;
-  await userName.doc(uid).get().then((DocumentSnapshot ) =>
-  _userName = DocumentSnapshot['name']);
-  print('user:$_userName');
-}
 
 
 class ShowAllGoogleMap extends StatefulWidget {
@@ -37,7 +30,6 @@ class _ShowAllGoogleMapState extends State<ShowAllGoogleMap> {
   void initState() {
     crearmarcadores();
     super.initState();
-    getUserName();
   }
 
   final FirebaseFirestore _database = FirebaseFirestore.instance;
@@ -48,11 +40,14 @@ class _ShowAllGoogleMapState extends State<ShowAllGoogleMap> {
     setState(() {
       // _identifier = loggedInUser.uid;
       DateTime now = DateTime.now();
+      DateTime Time = now.subtract(const Duration(minutes: 5));
       date = DateFormat.yMd().format(now);
+      time = DateFormat.Hms().format(Time);
+      print('DatetimePrinted: $time');
     });
-    _database.collection('location_test').where('Date', isEqualTo: date)
-    .get().then((value) {
-      if(value.docs.isNotEmpty){
+    _database.collection('location_test').orderBy("Time", descending: true).where('Date', isEqualTo: date)// .limit(3)
+       .get().then((value) { // .where("Time", isGreaterThanOrEqualTo: time)
+      if(value.docs.isNotEmpty ){
         for(int i= 0; i < value.docs.length; i++) {
           initMarker(value.docs[i].data(), value.docs[i].id);
         }
@@ -61,6 +56,9 @@ class _ShowAllGoogleMapState extends State<ShowAllGoogleMap> {
   }
 
   void initMarker(index, lugaresid) {
+    print('name: ${index['name']}');
+    print('time: ${index['Time']}');
+    address = index['CurrentAddress'];
     var markerIdVal = lugaresid;
     final MarkerId markerId = MarkerId(markerIdVal);
 
@@ -68,7 +66,7 @@ class _ShowAllGoogleMapState extends State<ShowAllGoogleMap> {
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(index['latitude'], index['longitude']),
-      infoWindow: InfoWindow(title: index['name']),
+      infoWindow: InfoWindow(title: index['name'], snippet: address),
     );
 
     setState(() {

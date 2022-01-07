@@ -2,6 +2,7 @@ class UserData {
 
   String formDate = '';
   String toDate = '';
+  String name = '';
 
   save() {
    if(formDate == null || toDate == null)

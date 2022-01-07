@@ -12,6 +12,8 @@ import 'package:location/location.dart';
 //  User ? loggedInUser;
 // final _auth = FirebaseAuth.instance;
 
+String ?  address;
+
 class MapScreen extends StatefulWidget {
   final String user_id;
   final String user_name;
@@ -40,14 +42,14 @@ class _MapScreenState extends State<MapScreen>  {
   }
 
   void initMarker(index, lugaresid) {
+    address = index['CurrentAddress'];
     var markerIdVal = lugaresid;
     final MarkerId markerId = MarkerId(markerIdVal);
-
     // creating a new MARKER
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(index['latitude'], index['longitude']),
-      infoWindow: InfoWindow(title: widget.user_name),
+      infoWindow: InfoWindow(title: widget.user_name, snippet: address),
     );
 
     setState(() {

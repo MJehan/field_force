@@ -93,7 +93,7 @@ class _MyProfileState extends State<MyProfile> {
       "time" : mainTime,
       //'outTime' : inTime,
       "date" : date,
-      "noteText" : noteTextController.text,
+      "DataSet Identifier" : noteTextController.text,
     });
   }
   _checkActiveUser(){
@@ -140,30 +140,68 @@ class _MyProfileState extends State<MyProfile> {
 
   Future<String?> openDialog()=> showDialog<String>(
     context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Check Point'),
-      content: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:  <Widget>[
-            TextField(
-              controller: noteTextController,
-              autofocus: true,
-              decoration: const InputDecoration(
-                hintText: 'Note',
-              ),
-              //controller: pop_controller,
+    builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              height: 200,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 70, 10, 10),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: noteTextController,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        hintText: 'Note',
+                      ),
+                    ),
+                    const SizedBox(height: 10.0),
+                    Container(
 
+                      height: 44.0,
+                      width: 150.0,
+                      decoration: BoxDecoration(
+                          gradient: const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
+                          borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: submit,
+                        style: ElevatedButton.styleFrom(primary: Colors.transparent, shadowColor: Colors.transparent),
+                        child: const Text('Submit'),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+             Positioned(
+                top: -50,
+                child: CircleAvatar(
+                  //backgroundColor: Colors.redAccent,
+                  radius: 50,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.blue,
+                          Colors.deepPurple
+                        ],
+                      ),
+                    ),
+                    child: const Icon(Icons.location_pin, color: Colors.white, size: 60),
+                  ),
+                  //child: Icon(Icons.location_pin, color: Colors.white, size: 60,),
+                )
             ),
           ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          child: const Text('Submit'),
-          onPressed: submit,
-        ),
-      ],
+        )
     ),
   );
 
@@ -182,6 +220,7 @@ class _MyProfileState extends State<MyProfile> {
   String inTime = '';
   String time = '';
   String outTime = '';
+  String workingTime = '';
 
   double lat = 0.0;
   double long = 0.0;
@@ -196,6 +235,7 @@ class _MyProfileState extends State<MyProfile> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+
         title: const Text('SCL Field Force'),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -217,6 +257,9 @@ class _MyProfileState extends State<MyProfile> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
+            // decoration: const BoxDecoration(
+            //   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50.0)),
+            // ),
             padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
             color: Colors.black12,
             child: Expanded(
@@ -260,6 +303,7 @@ class _MyProfileState extends State<MyProfile> {
                       onPressed: () async {
                         if(flag == true  )
                         {
+                          await openDialog();
                           await _getCurrentLocation();
                           await _listLocation();
                           setState(() {
@@ -294,14 +338,17 @@ class _MyProfileState extends State<MyProfile> {
                           );
                         }
                       },
-                      color: Colors.black12,
+                      color: (flag == false) ? Colors.teal : Colors.black12,
                       child: Column(
-                        children: const <Widget>[
-                          Icon(Icons.fingerprint_outlined, size: 65.00, color: Colors.green),
+                        children:  <Widget>[
+                           Icon(
+                              Icons.fingerprint_outlined, size: 65.00,
+                            color: (flag == true) ? Colors.green : Colors.white,
+                          ),
                           Text('Check In',
                             style: TextStyle(
                               fontSize: 15.00,
-                              color: Colors.green,
+                              color: (flag == true) ? Colors.green : Colors.white,
                             ),
                           ),
                         ],
@@ -373,6 +420,7 @@ class _MyProfileState extends State<MyProfile> {
                             create();
                           }
                           flag = true;
+                          noteTextController.clear();
                         }
                         else {
                           showDialog(
@@ -436,12 +484,12 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                   Expanded(
                     child: Row(
-                      children: const <Widget>[
-                        Icon(Icons.lock_clock, color: Colors.blue,),
+                      children:  <Widget>[
+                        const Icon(Icons.lock_clock, color: Colors.blue,),
                         Expanded(
                           child: Text(
-                            'Working Time',
-                            style: TextStyle(
+                            '$workingTime \nWorking Time',
+                            style: const TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
                             ),
@@ -516,111 +564,6 @@ class _MyProfileState extends State<MyProfile> {
               ),
             ),
           ),
-
-          // const SizedBox(height: 3.0),
-          //
-          // Container(
-          //   padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
-          //   decoration: const BoxDecoration(
-          //     color: Colors.black12,
-          //     borderRadius: BorderRadius.all(
-          //       Radius.circular(20.0),
-          //     ),
-          //   ),
-          //   child: Expanded(
-          //     child: Row(
-          //       children:  <Widget>[
-          //         Expanded(
-          //           child: Row(
-          //             children:  <Widget>[
-          //               Expanded(
-          //                 child: FlatButton(
-          //                   onPressed: ()  {
-          //                     // Navigator.of(context).push(MaterialPageRoute(
-          //                     //     builder: (context) => const AdminHomeScreen()));
-          //                   },
-          //                   color: Colors.black12,
-          //                   child: Column(
-          //                     children: const <Widget>[
-          //                       Icon(Icons.location_pin, size: 22.00, color: Colors.black),
-          //                       Text('Location',
-          //                         style: TextStyle(
-          //                           fontSize: 13.00,
-          //                           color: Colors.black,
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ),
-          //
-          //             ],
-          //           ),
-          //         ),
-          //         const VerticalDivider(
-          //           color: Colors.black,
-          //           width: 30,
-          //         ),
-          //         const SizedBox(
-          //           width: 8,
-          //         ),
-          //         Expanded(
-          //           child: Row(
-          //             children: <Widget>[
-          //               Expanded(
-          //                 child: FlatButton(
-          //                   onPressed: () {},
-          //                   color: Colors.black12,
-          //                   child: Column(
-          //                     children: const <Widget>[
-          //                       Icon(Icons.location_pin, size: 22.00, color: Colors.black),
-          //                       Text('Location',
-          //                         style: TextStyle(
-          //                           fontSize: 13.00,
-          //                           color: Colors.black,
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //         const VerticalDivider(
-          //           color: Colors.black,
-          //           width: 30,
-          //         ),
-          //         const SizedBox(
-          //           width: 8,
-          //         ),
-          //         Expanded(
-          //           child: Row(
-          //             children: <Widget>[
-          //               Expanded(
-          //                 child: FlatButton(
-          //                   onPressed: () async {},
-          //                   color: Colors.black12,
-          //                   child: Column(
-          //                     children: const <Widget>[
-          //                       Icon(Icons.more_horiz, size: 22.00, color: Colors.black),
-          //                       Text('More',
-          //                         style: TextStyle(
-          //                           fontSize: 13.00,
-          //                           color: Colors.black,
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -677,6 +620,8 @@ class _MyProfileState extends State<MyProfile> {
         "Date" : date,
         "Time" : time,
         "name" : _userName,
+        "DataSet Identifier" : noteTextController.text,
+        "Status" : status,
       },
         // SetOptions(merge: true),
       );

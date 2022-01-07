@@ -17,7 +17,15 @@ class ShowAllDataListView extends StatelessWidget {
             borderRadius: BorderRadius.circular(30.00),
             elevation: 10.00,
             color: Colors.deepPurpleAccent,
-            child: Padding(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30.00),
+                gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xff374ABE), Color(0xff64B6FF)],
+                ),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               child: Text('Location: $name\nTime: $email',
                 style: const TextStyle(

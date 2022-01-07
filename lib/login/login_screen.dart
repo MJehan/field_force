@@ -78,11 +78,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             hintText: 'Enter your password'),
                       ),
                       const SizedBox(
-                        height: 10.0,
+                        height: 20.0,
                       ),
-                      RoundedButton(
-                        title: 'Log In',
-                        colour: Colors.lightBlueAccent,
+                      RaisedButton(
                         onPressed: () async {
                           setState(() {
                             showSpinner = true;
@@ -121,21 +119,110 @@ class _LoginScreenState extends State<LoginScreen> {
                           setState(() {
                             showSpinner = false;
                           });
-                          // catch (e) {
-                          //   print(e);
-                          // }
                         },
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+                        padding: const EdgeInsets.all(0.0),
+                        child: Ink(
+                          decoration: BoxDecoration(
+                              gradient: const LinearGradient(colors: [Color(0xff374ABE), Color(0xff64B6FF)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(30.0)
+                          ),
+                          child: Container(
+                            constraints: const BoxConstraints(maxWidth: 375.0, minHeight: 50.0),
+                            alignment: Alignment.center,
+                            child: const Text(
+                              "Log In",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
+                      // RoundedButton(
+                      //   title: 'Log In',
+                      //   colour: Colors.lightBlueAccent,
+                      //   onPressed: () async {
+                      //     setState(() {
+                      //       showSpinner = true;
+                      //     });
+                      //     try {
+                      //       final user = await _auth.signInWithEmailAndPassword(
+                      //           email: email, password: password);
+                      //       if (user != null) {
+                      //         //final result = await userName.doc().get();
+                      //         SharedPreferences prefs = await SharedPreferences.getInstance();
+                      //         prefs.setString('email',email);
+                      //         Navigator.pushNamed(context, MyProfile.id);
+                      //       }
+                      //
+                      //       setState(() {
+                      //         showSpinner = false;
+                      //       });
+                      //     } on FirebaseAuthException catch (e) {
+                      //       showDialog(
+                      //         context: context,
+                      //         builder: (ctx) => AlertDialog(
+                      //           title: const Text("Ops! Login Failed"),
+                      //           content: Text('${e.message}'),
+                      //           actions: [
+                      //             TextButton(
+                      //               onPressed: () {
+                      //                 Navigator.of(ctx).pop();
+                      //               },
+                      //               child: const Text('Okay'),
+                      //             )
+                      //           ],
+                      //         ),
+                      //       );
+                      //       print(e);
+                      //     }
+                      //     setState(() {
+                      //       showSpinner = false;
+                      //     });
+                      //   },
+                      // ),
                       const SizedBox(
-                        height: 1.0,
+                        height: 15.0,
                       ),
-                      RoundedButton(
-                          title: 'Registration',
-                          colour: Colors.lightBlueAccent,
-                          onPressed: () async {
-                            Navigator.pushNamed(context, RegistrationScreen.id);
-                          }
+                      RaisedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, RegistrationScreen.id);
+                        },
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+                        padding: const EdgeInsets.all(0.0),
+                        child: Ink(
+                          decoration: BoxDecoration(
+                              gradient: const LinearGradient(colors: [Color(0xff374ABE), Color(0xff64B6FF)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(30.0)
+                          ),
+                          child: Container(
+                            constraints: const BoxConstraints(maxWidth: 375.0, minHeight: 50.0),
+                            alignment: Alignment.center,
+                            child: const Text(
+                              "Registration",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
+                      // RoundedButton(
+                      //     title: 'Registration',
+                      //     colour: Colors.lightBlueAccent,
+                      //     onPressed: () async {
+                      //       Navigator.pushNamed(context, RegistrationScreen.id);
+                      //     }
+                      // ),
                     ],
                   ),
 
