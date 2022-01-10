@@ -265,9 +265,10 @@ class _MyProfileState extends State<MyProfile> {
             child: Expanded(
               child: Row(
                 children:  <Widget>[
-                  const Expanded(
+                   const Expanded(
                     child: CircleAvatar(
                       radius: 50,//radius is 50
+                      //backgroundImage: AssetImage('images/scom2.png'),
                       backgroundImage: NetworkImage(
                           'https://www.donkey.bike/wp-content/uploads/2020/12/user-member-avatar-face-profile-icon-vector-22965342-300x300.jpg'),
                     ),

@@ -18,12 +18,13 @@ import 'list_view_all.dart';
 // import 'dart:async';
 
 
-final CollectionReference collectionReference = FirebaseFirestore.instance.collection('Location_And_Data');
+final CollectionReference collectionReference = FirebaseFirestore.instance.collection('user_active');
 final firebase = FirebaseFirestore.instance;
 final _auth = FirebaseAuth.instance;
 
 
-//String ? _identifier;
+String ? _identifier;
+String  identifire = '';
 String _userName = '';
 int ? _userLenght ;
 String date = '';
@@ -148,7 +149,24 @@ class StreamBuilderScreen extends StatelessWidget {
           {
             final name = message.get('name');
             final email = message.get('email');
-            final resultWidget = ShowAllDataListView(name, email);
+            _identifier = message.get('_identifier');
+              firebase.collection('user_active').where('date', isEqualTo: date).
+              where('identifier', isEqualTo: _identifier).limit(1).snapshots();
+            build(context, snapshot)
+            {
+              if(snapshot.hasData){
+                final _userId = snapshot.data!.docs;
+                for(var check in _userId)
+                  {
+                     identifire = check.get('status');
+
+                  }
+                print('insidestatus: $identifire');
+              }
+              else print('couldnot find status');
+            }
+            print('status: $identifire');
+            final resultWidget = ShowAllDataListView(name, email,identifire);
             resultWidgets.add(resultWidget);
           }
           _userLenght = resultWidgets.length;
