@@ -1,8 +1,5 @@
-import 'package:field_force/admin/Search/search_screen_home.dart';
-import 'package:field_force/admin/screens/home_screen.dart';
-import 'package:field_force/admin/screens/search_employee.dart';
-import 'package:field_force/admin/screens/show_all_google_maop.dart';
 import 'package:field_force/login/login_screen.dart';
+import 'package:field_force/screens/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,7 +21,7 @@ class NavDrawer extends StatelessWidget {
               ),
             ),
             child: Text(
-              'SCL Field Force',
+              'E-Book',
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.white,
@@ -34,18 +31,18 @@ class NavDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.location_pin, color: Colors.red,),
-            title: const Text('Location'),
+            title: const Text('Profile'),
             onTap: () => {
             Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const ShowAllGoogleMap()))
+            builder: (context) => const Profile()))
             },
           ),
           ListTile(
             leading: const Icon(Icons.search, color: Colors.deepPurple,),
             title: const Text('Find Employee'),
             onTap: () => {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const SearchScreenHome()))
+              // Navigator.of(context).push(MaterialPageRoute(
+              //     builder: (context) => const SearchScreenHome()))
             },
           ),
           // ListTile(
@@ -62,9 +59,9 @@ class NavDrawer extends StatelessWidget {
             leading: const Icon(Icons.vpn_key_outlined),
             title: const Text('Admin Credentials'),
             onTap: () => {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const AdminHomeScreen())
-              ),
+              // Navigator.of(context).push(MaterialPageRoute(
+              //     builder: (context) => const AdminHomeScreen())
+              //),
             },
           ),
           ListTile(

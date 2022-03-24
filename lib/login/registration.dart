@@ -23,6 +23,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   late String email;
   late String password;
   late String name;
+  late String department;
+  late String regnum;
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +43,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   tag: 'logo',
                   child: Container(
                     //height: 200.0,
-                    child: Image.asset('images/scom.jpg'),
+                    child: Image.asset('images/bg_l.png'),
                   ),
                 ),
               ),
               const SizedBox(
-                height: 48.0,
+                height: 30.0,
+              ),
+              const Center(
+                child: Text(
+                  "SignUp",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: Colors.blueAccent,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
               ),
               TextField(
                 //obscureText: true,
@@ -55,7 +70,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   name = value;
                 },
                 decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your Name'),
+                    hintText: 'Student Name'),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              TextField(
+                //obscureText: true,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  regnum = value;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Registration number'),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              TextField(
+                //obscureText: true,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  department = value;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Department'),
               ),
               const SizedBox(
                 height: 8.0,
@@ -97,6 +136,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       User? user = await _auth.currentUser;
                       collectionReference.doc(user!.uid).set({
                         "name" : name,
+                        "regnum": regnum,
+                        "department" : department,
                         "email" : email,
                         "password" : password,
                         "_identifier" : user.uid,
